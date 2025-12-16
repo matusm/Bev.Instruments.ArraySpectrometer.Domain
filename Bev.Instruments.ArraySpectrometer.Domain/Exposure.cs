@@ -19,11 +19,13 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
             double optimalIntegrationTime = 0;
             double integrationTime = minIntegrationTime;
             spectrometer.SetIntegrationTime(integrationTime);
+            _ = spectrometer.GetIntensityData(); // discard first spectrum
             double minExposureSignal = spectrometer.GetIntensityData().GetMaxIntensity();
 
             while (integrationTime < maxIntegrationTime)
             {
                 spectrometer.SetIntegrationTime(integrationTime);
+                _ = spectrometer.GetIntensityData(); // discard first spectrum
                 double maxSignal = spectrometer.GetIntensityData().GetMaxIntensity();
 
                 if (debug)
@@ -33,6 +35,7 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
                 if (maxSignal >= 0.49 * targetSignal)
                 {
                     // Estimate optimal integration time by linear extrapolation
+                    _ = spectrometer.GetIntensityData(); // discard first spectrum
                     optimalIntegrationTime = spectrometer.GetIntegrationTime() * (targetSignal / (maxSignal - minExposureSignal));
                     break;
                 }
@@ -46,6 +49,7 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
             spectrometer.SetIntegrationTime(finalIntegrationTime);
             if (debug)
             {
+                _ = spectrometer.GetIntensityData(); // discard first spectrum
                 double maxSignal = spectrometer.GetIntensityData().GetMaxIntensity();
                 Console.WriteLine($">>> debug final {spectrometer.GetIntegrationTime():F5} s -> {maxSignal:F0}");
             }
