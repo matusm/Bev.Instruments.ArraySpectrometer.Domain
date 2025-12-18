@@ -27,7 +27,7 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
 
                 if (debug)
                 {
-                    Console.WriteLine($">>> debug {spectrometer.GetIntegrationTime():F5} s -> {maxSignal:F0}");
+                    Console.WriteLine($">>> debug {spectrometer.GetIntegrationTime():F5} s -> {maxSignal}");
                 }
                 if (maxSignal >= 0.49 * targetSignal)
                 {
@@ -46,7 +46,7 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
             if (debug)
             {
                 double maxSignal = spectrometer.GetIntensityData().GetMaxIntensity();
-                Console.WriteLine($">>> debug final {spectrometer.GetIntegrationTime():F5} s -> {maxSignal:F0}");
+                Console.WriteLine($">>> debug final {spectrometer.GetIntegrationTime():F5} s -> {maxSignal}");
             }
             return finalIntegrationTime;
         }
