@@ -5,11 +5,11 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
 {
     public static class Exposure
     { 
-        private static readonly double SafetyFactor = 0.95;
+        private static readonly double _saturationSafetyFactor = 0.95;
 
-        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer) => spectrometer.GetOptimalExposureTime(SafetyFactor * spectrometer.SaturationLevel, false);
+        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer) => spectrometer.GetOptimalExposureTime(_saturationSafetyFactor * spectrometer.SaturationLevel, false);
 
-        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer, bool debug) => spectrometer.GetOptimalExposureTime(SafetyFactor * spectrometer.SaturationLevel, debug);
+        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer, bool debug) => spectrometer.GetOptimalExposureTime(_saturationSafetyFactor * spectrometer.SaturationLevel, debug);
 
         public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer, double targetSignal, bool debug)
         {
