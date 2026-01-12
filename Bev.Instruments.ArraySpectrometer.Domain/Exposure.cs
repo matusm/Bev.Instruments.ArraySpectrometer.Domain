@@ -4,8 +4,9 @@ using System;
 namespace Bev.Instruments.ArraySpectrometer.Domain
 {
     public static class Exposure
-    { 
-        private static readonly double _saturationSafetyFactor = 0.95;
+    {
+        // value according to "Photometrieseminar 2024 - Praktikum Spektroradiometrie", slide 7
+        private static readonly double _saturationSafetyFactor = 0.85;
 
         public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer) => spectrometer.GetOptimalExposureTime(_saturationSafetyFactor * spectrometer.SaturationLevel, false);
 
