@@ -8,11 +8,9 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
         // value according to "Photometrieseminar 2024 - Praktikum Spektroradiometrie", slide 7
         private static readonly double _saturationSafetyFactor = 0.85;
 
-        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer) => spectrometer.GetOptimalExposureTime(_saturationSafetyFactor * spectrometer.SaturationLevel, false);
+        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer) => spectrometer.GetOptimalExposureTime(_saturationSafetyFactor * spectrometer.SaturationLevel);
 
-        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer, bool debug) => spectrometer.GetOptimalExposureTime(_saturationSafetyFactor * spectrometer.SaturationLevel, debug);
-
-        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer, double targetSignal, bool debug)
+        public static double GetOptimalExposureTime(this IArraySpectrometer spectrometer, double targetSignal)
         {
             double maxIntegrationTime = spectrometer.MaximumIntegrationTime;
             double minIntegrationTime = spectrometer.MinimumIntegrationTime;
@@ -25,11 +23,6 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
             {
                 spectrometer.SetIntegrationTime(integrationTime);
                 double maxSignal = spectrometer.GetIntensityData().GetMaxIntensity();
-
-                if (debug)
-                {
-                    Console.WriteLine($">>> debug {spectrometer.GetIntegrationTime():F5} s -> {maxSignal}");
-                }
                 if (maxSignal >= 0.49 * targetSignal)
                 {
                     // Estimate optimal integration time by linear extrapolation
@@ -44,11 +37,6 @@ namespace Bev.Instruments.ArraySpectrometer.Domain
                 finalIntegrationTime = maxIntegrationTime;
             }
             spectrometer.SetIntegrationTime(finalIntegrationTime);
-            if (debug)
-            {
-                double maxSignal = spectrometer.GetIntensityData().GetMaxIntensity();
-                Console.WriteLine($">>> debug final {spectrometer.GetIntegrationTime():F5} s -> {maxSignal}");
-            }
             return finalIntegrationTime;
         }
 
